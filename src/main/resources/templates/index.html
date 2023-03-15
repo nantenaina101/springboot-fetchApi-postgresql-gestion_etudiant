@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestion des étudiants</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&family=Roboto:wght@100;300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  </head>
+  <body>
+  	<div class="global-container">
+
+      <nav class="side-nav">
+        <div class="nav-logo">
+          <img th:src="@{/images/logo.svg}">
+          <h2> &nbsp;&nbsp;Etudiants</h2>
+        </div>
+
+        <a href="#" class="bloc-link">
+          <img th:src="@{/images/dashboard.svg}">
+          <span class="nav-links">Dashboard</span>
+        </a>
+        <a href="#" class="bloc-link">
+          <img th:src="@{/images/speech-bubble.svg}">
+          <span class="nav-links">Message</span>
+        </a>
+        <a href="#" class="bloc-link active">
+          <img th:src="@{/images/server.svg}">
+          <span class="nav-links">Liste</span>
+        </a>
+        <a href="#" class="bloc-link">
+          <img th:src="@{/images/calendar.svg}">
+          <span class="nav-links">Calendrier</span>
+        </a>
+      </nav>
+
+      <main class="main-content">
+
+        <div class="input-control">
+          <label for="search">
+            <img th:src="@{/images/search.svg}">
+          </label>
+          <input type="text" id="search" placeholder="Recherche d'un étudiant">
+        </div>
+
+        <h2 class="main-title">Liste des étudiants</h2>
+        
+        <div th:switch="${etudiants}" class="container">
+		    <h2 th:case="null">Aucun étudiant enregistré</h2>
+		    <p><a href="/add-etudiant"><i style="font-size:20px;" class="bi bi-person-fill-add"></i>&nbsp;&nbsp;Ajouter un étudiant</a></p>
+		    <div th:case="*">
+		        <table class="table table-bordered text-center">
+		            <thead>
+		                <tr>
+		                    <th>Profil</th>
+		                    <th>Prénom</th>
+		                    <th>Nom</th>
+		                    <th>Email</th>
+		                    <th>Téléphone</th>
+		                    <th>Sexe</th>
+		                    <th>Classe</th>
+		                    <th>Actions</th>
+		                </tr>
+		            </thead>
+		            <tbody>
+			            <tr th:each="etudiant : ${etudiants}">
+			           		<td class="image text-center">
+				           		<span th:if="${etudiant.image != null}">
+				           			<img style="min-width:40px; min-height: 40px;max-width:40px; max-height: 40px;" th:src="@{'/uploads/' + ${etudiant.image}}">
+				           		</span>
+				           		<span th:if="${etudiant.image == null}">
+				           			Aucune
+				           		</span>
+			           		</td>
+			                <td th:text="${etudiant.firstname}"></td>
+			                <td th:text="${etudiant.lastname}"></td>
+			                <td th:text="${etudiant.email}"></td>
+			                <td th:text="${etudiant.telephone}"></td>
+			                <td th:text="${etudiant.sexe}"></td>
+			                <td>
+			            		<span th:if="${etudiant.classe == 1}">6è</span>
+    							<span th:if="${etudiant.classe == 2}">5è</span>
+    							<span th:if="${etudiant.classe == 3}">4è</span>
+    							<span th:if="${etudiant.classe == 4}">3è</span>
+    							<span th:if="${etudiant.classe == 5}">Seconde</span>
+    							<span th:if="${etudiant.classe == 6}">Première</span>
+    							<span th:if="${etudiant.classe == 7}">Terminale</span>
+			            	</td>
+			                <td><a th:href="@{/edit/{id}(id=${etudiant.id})}">
+			                		<i style="color:blue;" class="bi bi-pencil-square"></i>
+			                	</a>
+			                	<span>&nbsp;&nbsp;</span>
+			                	<a th:href="@{/delete/{id}(id=${etudiant.id})}">
+			                		<i style="color:red;" class="bi bi-trash3"></i>
+			                	</a>
+			                </td>		
+			            </tr>
+			        </tbody>
+		    	</table>
+		    </div>
+		</div>
+        
+      </main>
+
+    </div>
+
+  </body>
+</html>

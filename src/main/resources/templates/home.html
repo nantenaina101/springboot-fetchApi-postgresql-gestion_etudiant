@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestion des étudiants</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&family=Roboto:wght@100;300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body>
+  	<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+		<symbol id="check-circle-fill" fill="currentColor" viewbox="0 0 16 16">
+			<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+		</symbol>
+	</svg>
+  	<div class="global-container">
+
+      <nav class="side-nav">
+        <div class="nav-logo">
+          <img th:src="@{/images/logo.svg}">
+          <h2> &nbsp;&nbsp;Etudiants</h2>
+        </div>
+
+        <a href="#" class="bloc-link">
+          <img th:src="@{/images/dashboard.svg}">
+          <span class="nav-links">Dashboard</span>
+        </a>
+        <a href="#" class="bloc-link">
+          <img th:src="@{/images/speech-bubble.svg}">
+          <span class="nav-links">Message</span>
+        </a>
+        <a href="#" class="bloc-link active">
+          <img th:src="@{/images/server.svg}">
+          <span class="nav-links">Liste</span>
+        </a>
+        <a href="#" class="bloc-link">
+          <img th:src="@{/images/calendar.svg}">
+          <span class="nav-links">Calendrier</span>
+        </a>
+      </nav>
+
+      <main class="main-content">
+		
+        <div class="input-control">
+          <label for="search">
+            <img th:src="@{/images/search.svg}">
+          </label>
+          <input type="text" id="search" placeholder="Recherche d'un étudiant">
+        </div>
+
+        <h2 class="main-title" id="mainTitle">Liste des étudiants</h2>
+        <p><a href="#" id="addBtn"><i style="font-size:20px;" class="bi bi-person-fill-add"></i>&nbsp;&nbsp;Ajouter un étudiant</a></p>
+        <div class="container">
+	        <form id="form" class="w-50" style="display:none;">
+			    <div class="row mb-3">
+			    	<div class="col-6">
+			    	
+				    	<select id="classe" class="custom-select custom-select-sm">
+						  <option th:value="1" th:text="6è"></option>
+						  <option th:value="2" th:text="5è"></option>
+						  <option th:value="3" th:text="4è"></option>
+						  <option th:value="4" th:text="3è"></option>
+						  <option th:value="5" th:text="Seconde"></option>
+						  <option th:value="6" th:text="Première"></option>
+						  <option th:value="7" th:text="Terminale"></option>
+						</select>
+				    
+				    </div>
+				    <div class="col-6">
+				    	Sexe  
+				    	<div class="form-check form-check-inline">
+						  <input class="form-check-input" type="radio" name="sexe"  id="feminin" value="feminin">
+						  <label class="form-check-label" for="feminin">Féminin</label>
+						</div>
+						<div class="form-check form-check-inline">
+						  <input class="form-check-input" type="radio" name="sexe" id="masculin" value="masculin" th:checked="true">
+						  <label class="form-check-label" for="masculin">Masculin</label>
+						</div>
+				    
+				    </div>
+			    </div>
+			    
+			    <div class="row mb-3">
+			    	<div class="col-6">
+					    
+					    <input type="text" id="firstname" placeholder="Prénom" class="form-control">
+				    
+				    </div>
+				    <div class="col-6">
+					    
+					    <input type="text" id="lastname" placeholder="Nom" class="form-control">
+				    
+				    </div>
+			    </div>
+			    <div class="row mb-3">
+			    	<div class="col-6">
+					    
+					    <input type="text" id="email" placeholder="Email" class="form-control">
+				    
+				    </div>
+				    <div class="col-6">
+					    
+					    <input type="text" id="telephone" placeholder="Téléphone" class="form-control">
+				    
+				    </div>
+			    </div>
+			    
+			    <div>Photo de profil</div>
+				<div class="row">
+					<div class="col-4">
+						<label style="margin-left:25%;" for="image">
+							<i style="margin-top:5px;cursor:pointer;background-image: url(&quot;https://static.xx.fbcdn.net/rsrc.php/v3/yB/r/0vR9H8iux5G.png?_nc_eui2=AeEvcr8vVXq0wxEnW6d-U2x6Cr_QprbGjx4Kv9CmtsaPHugo3hZW-h0b0iFoxO3NohAeoro_KXocl2rFKLxrU5ui&quot;); background-position: 0px -130px; background-size: auto; width: 20px; height: 20px; background-repeat: no-repeat; display: inline-block;"></i>
+						</label>
+						<input type="file" name="image" id="image" style="display:none;visibility:none;" accept="image/*">
+						<br>
+						<img id="contentImage" style="display:none;min-height: 80px; min-width:80px; max-width:100px; max-height: 100px;" th:src="@{/uploads/image.png}">
+			    	</div>
+			    	<div class="col-5">
+			    		
+			    	</div>
+			    	<div class="col-3">
+			    		<input type="hidden" id="methode" value="add_student">
+			    		<input type="submit" value="Enregistrer" id="submitForm" class="btn btn-primary" style="float:right;margin-bottom:20px;">
+			    	</div>
+			    </div>
+			    
+			</form>
+        </div>
+        <div id="successMessageBlock" style="display:none;margin-left:2%;margin-bottom:10px;">
+			<svg color="green" class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/>
+			</svg>
+			<span id="successMessage"></span>
+		</div>
+        
+        <div class="container" id="container">
+		    
+		</div>
+		
+		<!-- MODAL DELETE -->
+ 
+      <div class="modal fade" tabindex="-1" id="deleteStudentModal">
+		  <div class="modal-dialog modal-dialog-centered">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title">Suppression d'un étudiant</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+		      </div>
+		      <div class="modal-body">
+		        <p>Etes vous sûr de vouloir supprimer <span id="etudiantName"></span> de la liste?</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-danger" id="removeStudent" onclick="removeStudent(this)" data-dismiss="modal">Supprimer</button>
+		      </div>
+		    </div>
+		  </div>
+	  </div>
+        
+      </main>
+      
+
+    </div>
+    <script type="text/javascript" th:src="@{/js/script.js}"></script>
+  </body>
+</html>
