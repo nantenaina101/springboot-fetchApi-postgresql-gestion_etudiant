@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" xmlns:th="https://www.thymeleaf.org"
+  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gestion des étudiants</title>
+    <title>Gestion de Scolarité</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -48,15 +49,23 @@
           <img th:src="@{/images/calendar.svg}">
           <span class="nav-links">Calendrier</span>
         </a>
+        <a th:href="@{/logout}" class="bloc-link">
+          <img th:src="@{/images/deconnection.jpg}">
+          <span class="nav-links">Déconnexion</span>
+        </a>
       </nav>
 
       <main class="main-content">
-		
-        <div class="input-control">
-          <label for="search">
-            <img th:src="@{/images/search.svg}">
-          </label>
-          <input type="text" id="search" placeholder="Recherche d'un étudiant">
+		<div class="row">
+	        <div class="col-6 input-control">
+	          <label for="search">
+	            <img th:src="@{/images/search.svg}">
+	          </label>
+	          <input type="text" id="search" placeholder="Recherche d'un étudiant">
+	        </div>
+	        <div class="col-6">
+	        	<h3 style="float:right;margin-right:15px;"> <span th:text="${firstname} + ' ' +  ${lastname} "></span></h3>
+	        </div>
         </div>
 
         <h2 class="main-title" id="mainTitle">Liste des étudiants</h2>

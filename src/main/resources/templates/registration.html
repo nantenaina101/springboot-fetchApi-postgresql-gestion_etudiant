@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Gestion de Scolarité</title>
+<link rel="stylesheet" type="text/css" th:href="@{/css/all.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+</head>
+<style>
+.navbar {
+	background-color: green;
+}
+</style>
+<body>
+
+	<section class="pt-5 pb-5 mt-0 align-items-center d-flex bg-dark" style="min-height: 100vh; background-size: cover; background-image: url(https://images.unsplash.com/photo-1477346611705-65d1883cee1e?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1920&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjMyMDc0fQ&amp;s=c0d43804e2c7c93143fe8ff65398c8e9);">
+        <div class="container-fluid">
+          <div class="row  justify-content-center align-items-center d-flex-row text-center h-100">
+            <div class="col-12 col-md-4 col-lg-3 h-50 ">
+              <div class="card shadow">
+                <div class="card-body mx-auto">
+                  <h4 class="card-title mt-3 text-center">Créer un compte</h4>
+                  <form th:action="@{/registration}" method="post" th:object="${user}">
+                    <div class="form-group input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="bi bi-person-fill"></i> </span>
+                      </div>
+                      <input th:field="*{firstName}" class="form-control" placeholder="Prénom" type="text" required>
+                    </div>
+                    <div class="form-group input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="bi bi-person-fill"></i> </span>
+                      </div>
+                      <input th:field="*{lastName}" class="form-control" placeholder="Nom" type="text" required>
+                    </div>
+                    <div class="form-group input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="bi bi-envelope-fill"></i> </span>
+                      </div>
+                      <input th:field="*{email}" class="form-control" placeholder="Email" type="email" required>
+                    </div>
+                    <div class="form-group input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="bi bi-lock-fill"></i> </span>
+                      </div>
+                      <input th:field="*{password}" class="form-control" placeholder="Mot de passe" type="password" required>
+                    </div>
+                    <div class="form-group input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="bi bi-lock-fill"></i> </span>
+                      </div>
+                      <input name="repassword" class="form-control" placeholder="Rétaper le mot de passe" type="password" required>
+                    </div>
+                    <div class="form-group">
+                      <button type="submit" class="btn btn-primary btn-block"> Créer un compte </button>
+                    </div>
+                    <p class="text-center">Vous avez déjà un compte?
+                      <a th:href="@{/login}">Connexion</a>
+                    </p>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+     </section>
+     
+</body>
+</html>

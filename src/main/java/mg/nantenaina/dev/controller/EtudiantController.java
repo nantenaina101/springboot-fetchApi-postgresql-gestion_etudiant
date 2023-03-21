@@ -7,6 +7,9 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,9 +21,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import mg.nantenaina.dev.model.Etudiant;
 import mg.nantenaina.dev.repository.EtudiantRepository;
+import mg.nantenaina.dev.repository.UserRepository;
 
 @Controller
 public class EtudiantController {
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	public static String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/src/main/resources/static/uploads";
 
@@ -66,9 +73,20 @@ public class EtudiantController {
 	@GetMapping("/")
 	public String showEtudiantList(Model model) {
 		model.addAttribute("etudiants", etudiantRepository.findAll());
+		String email = "";
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			email = authentication.getName();
+			model.addAttribute("email", email);
+			model.addAttribute("firstname", userRepository.findByEmail(email).getFirstName());
+			model.addAttribute("lastname", userRepository.findByEmail(email).getLastName());
+			
+		}
+		
 		//return "index";
 		return "home";
 	}
+
 
 	@GetMapping("/edit/{id}")
 	public String showUpdateForm(@PathVariable("id") long id, Model model) {
