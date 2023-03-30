@@ -1,0 +1,10 @@
+Create executable jar file in Spring Boot
+
+Step 1: Configure packaging as jar
+Add <packaging>jar</packaging> in pom.xml
+
+Step 2: Creating executable jar using maven
+mvn package || mvn clean package
+
+Step 3: Executing jar file
+project_directory:> java -jar target/dev-0.0.1-SNAPSHOT.jar
