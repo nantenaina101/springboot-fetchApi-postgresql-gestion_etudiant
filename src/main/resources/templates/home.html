@@ -45,6 +45,10 @@
           <img th:src="@{/images/server.svg}">
           <span class="nav-links">Liste</span>
         </a>
+        <a href="/user/profil" class="bloc-link">
+          <img th:src="@{/images/profil-3.png}">
+          <span class="nav-links">Profil</span>
+        </a>
         <a href="#" class="bloc-link">
           <img th:src="@{/images/calendar.svg}">
           <span class="nav-links">Calendrier</span>
@@ -57,14 +61,20 @@
 
       <main class="main-content">
 		<div class="row">
-	        <div class="col-6 input-control">
+	        <div class="col-4 input-control">
 	          <label for="search">
 	            <img th:src="@{/images/search.svg}">
 	          </label>
 	          <input type="text" id="search" placeholder="Recherche d'un étudiant">
 	        </div>
-	        <div class="col-6">
-	        	<h3 style="float:right;margin-right:15px;"> <span th:text="${firstname} + ' ' +  ${lastname} "></span></h3>
+	        <div class="col-8">
+	        	<div class="text-center" style="float:right;margin-right:15px;"> <a th:href="@{/user/profil}">
+	        		<img style="min-width:80px; min-height: 80px;max-width:80px; max-height: 80px;" th:src="${photo_profil}?@{'/uploads/'+${photo_profil}}:@{/uploads/img_avatar.png}"> 
+	        		
+	        		<br> <span style="font-weight:bold;" th:text="${firstname} + ' ' +  ${lastname} "></span></a><br>
+	        		<span style="color:#E57824;font-weight:bolder;" th:text="${#strings.replace(role[0],'ROLE_','')}"></span>
+	        	</div>
+	        		<input id="role" type="hidden" th:value="${role[0]}">
 	        </div>
         </div>
 
@@ -115,7 +125,7 @@
 			    <div class="row mb-3">
 			    	<div class="col-6">
 					    
-					    <input type="text" id="email" placeholder="Email" class="form-control">
+					    <input type="email" id="email" placeholder="Email" class="form-control">
 				    
 				    </div>
 				    <div class="col-6">

@@ -19,7 +19,6 @@ import mg.nantenaina.dev.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
-
 	private UserRepository userRepository;
 
 	@Autowired
@@ -41,7 +40,6 @@ public class UserServiceImpl implements UserService {
 
 		User user = new User(registrationDto.getFirstName(), registrationDto.getLastName(), registrationDto.getEmail(),
 				passwordEncoder.encode(registrationDto.getPassword()), Arrays.asList(new Role(role)));
-	
 		return userRepository.save(user);
 	}
 

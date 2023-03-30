@@ -41,7 +41,7 @@
 
         <h2 class="main-title">Modifier un étudiant</h2>
         
-        <form class="w-50" action="#" th:action="@{/update/{id}(id=${etudiant.id})}" th:object="${etudiant}" method="post" enctype="multipart/form-data">
+        <form class="w-50" th:action="@{/update/{id}(id=${etudiant.id})}" th:object="${etudiant}" method="post" enctype="multipart/form-data">
 		    <div class="row mb-3">
 		    	<div class="col-6">
 		    	

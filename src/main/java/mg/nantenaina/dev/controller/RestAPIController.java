@@ -1,5 +1,6 @@
 package mg.nantenaina.dev.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
@@ -15,6 +16,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,13 +28,27 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import mg.nantenaina.dev.config.SecurityConfiguration;
 import mg.nantenaina.dev.model.Etudiant;
+import mg.nantenaina.dev.model.Profil;
+import mg.nantenaina.dev.model.User;
 import mg.nantenaina.dev.repository.EtudiantRepository;
+import mg.nantenaina.dev.repository.ProfilRepository;
+import mg.nantenaina.dev.repository.UserRepository;
 
 @RestController
-public class EtudiantRestAPIController {
+public class RestAPIController {
+	
+	@Autowired
+	private BCryptPasswordEncoder imageNameEncoder;
 	
 	public static String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/src/main/resources/static/uploads";
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	ProfilRepository profilRepository;
 	
 	@Autowired
 	private EtudiantRepository etudiantRepository;
@@ -126,11 +142,24 @@ public class EtudiantRestAPIController {
 
 			System.out.println("image : " + file.getOriginalFilename());
 			
-			Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, file.getOriginalFilename());
+			//Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, file.getOriginalFilename());
+			String ext = getFileExtension(file.getOriginalFilename());
+			
+			System.out.println("Extension : " + ext);
+			
+			String newPhotoName = imageNameEncoder.encode(file.getOriginalFilename()).replaceAll("[^A-Za-z0-9]", "_")+ext;
+			
+			System.out.println("image : " + newPhotoName);
+			
+			//Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, file.getOriginalFilename());
+			
+			//Files.write(fileNameAndPath, file.getBytes());
+			
+			Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, newPhotoName);
 			
 			Files.write(fileNameAndPath, file.getBytes());
 			
-			etudiant.setImage(file.getOriginalFilename());
+			etudiant.setImage(newPhotoName);
 		
 		}else {
 			etudiant.setImage("img_avatar.png");
@@ -225,11 +254,21 @@ public class EtudiantRestAPIController {
 
 				System.out.println("image : " + file.getOriginalFilename());
 				
-				Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, file.getOriginalFilename());
+				String ext = getFileExtension(file.getOriginalFilename());
+				
+				System.out.println("Extension : " + ext);
+				
+				String newPhotoName = imageNameEncoder.encode(file.getOriginalFilename()).replaceAll("[^A-Za-z0-9]", "_")+ext;
+				
+				System.out.println("image : " + newPhotoName);
+				
+				//Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, file.getOriginalFilename());
+				
+				Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, newPhotoName);
 				
 				Files.write(fileNameAndPath, file.getBytes());
 				
-				etudiant.setImage(file.getOriginalFilename());
+				etudiant.setImage(newPhotoName);
 			
 			}else {
 				String image = etudiantRepository.findById(id).get().getImage();
@@ -252,6 +291,110 @@ public class EtudiantRestAPIController {
 			etudiantRepository.save(etudiant);
 
 			text = "Etudiant modifié avec succès";
+			
+		}
+
+		return text;
+
+	}
+	
+	@GetMapping("/user/{id}")
+	public User getUserProfil(@PathVariable long id) throws Exception {
+		Optional<User> user = userRepository.findById(id);
+
+		if (user.isEmpty())
+			throw new Exception("Acun utilisateur trouvé pour l'identifiant " + id);
+
+		return user.get();
+	}
+	
+	public String getFileExtension(String name) {
+	    int lastIndex = name.lastIndexOf(".");
+	    if (lastIndex == -1) {
+	        return ""; // empty extension
+	    }
+	    return name.substring(lastIndex);
+	}
+	
+	@PutMapping("/api/v1/update-profil-picture")
+	public String updateProfil(@RequestParam MultipartFile file) throws IOException {
+		String email = SecurityConfiguration.getUserEmail();
+		long id = profilRepository.findByEmail(email).getId();
+		Optional<Profil> profilOptional = profilRepository.findById(id);
+
+		String text = "";
+		if (profilOptional.isEmpty()) {
+			text = "Aucun profil trouvé pour l'identifiant " + id;
+		} else {
+			
+			Profil profil = new Profil();
+			
+			profil.setId(id);
+
+			String ext = getFileExtension(file.getOriginalFilename());
+
+			String newPhotoName = imageNameEncoder.encode(file.getOriginalFilename()).replaceAll("[^A-Za-z0-9]", "_")+ext;
+			
+			Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, newPhotoName);
+			
+			Files.write(fileNameAndPath, file.getBytes());
+			
+			profil.setProfil(newPhotoName);
+			
+			profil.setCouverture(profilRepository.findByEmail(email).getCouverture());
+			
+			profil.setFirstname(profilRepository.findByEmail(email).getFirstname());
+			
+			profil.setLastname(profilRepository.findByEmail(email).getLastname());
+			
+			profil.setEmail(email);
+			
+			profilRepository.save(profil);
+
+			text = "Photo de profil modifié avec succès";
+			
+		}
+
+		return text;
+
+	}
+	
+	@PutMapping("/api/v1/update-couverture-picture")
+	public String updateCouverture(@RequestParam MultipartFile file) throws IOException {
+		String email = SecurityConfiguration.getUserEmail();
+		long id = profilRepository.findByEmail(email).getId();
+		Optional<Profil> profilOptional = profilRepository.findById(id);
+
+		String text = "";
+		if (profilOptional.isEmpty()) {
+			text = "Aucun profil trouvé pour l'identifiant " + id;
+		} else {
+			
+			Profil profil = new Profil();
+			
+			profil.setId(id);
+
+			String ext = getFileExtension(file.getOriginalFilename());
+
+			String newPhotoName = imageNameEncoder.encode(file.getOriginalFilename()).replaceAll("[^A-Za-z0-9]", "_")+ext;
+			
+			Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, newPhotoName);
+			
+			Files.write(fileNameAndPath, file.getBytes());
+			
+			profil.setCouverture(newPhotoName);
+			
+			profil.setProfil(profilRepository.findByEmail(email).getProfil());
+			
+			profil.setFirstname(profilRepository.findByEmail(email).getFirstname());
+			
+			profil.setLastname(profilRepository.findByEmail(email).getLastname());
+			
+			profil.setEmail(email);
+			
+			profilRepository.save(profil);
+
+			text = "Photo de couverture modifié avec succès";
 			
 		}
 

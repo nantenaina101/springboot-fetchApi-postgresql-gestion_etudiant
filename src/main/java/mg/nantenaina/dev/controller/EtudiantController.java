@@ -7,9 +7,6 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,8 +16,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
+import mg.nantenaina.dev.config.SecurityConfiguration;
 import mg.nantenaina.dev.model.Etudiant;
+import mg.nantenaina.dev.model.User;
 import mg.nantenaina.dev.repository.EtudiantRepository;
+import mg.nantenaina.dev.repository.ProfilRepository;
 import mg.nantenaina.dev.repository.UserRepository;
 
 @Controller
@@ -28,6 +29,9 @@ public class EtudiantController {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	ProfilRepository profilRepository;
 
 	public static String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/src/main/resources/static/uploads";
 
@@ -72,16 +76,18 @@ public class EtudiantController {
 
 	@GetMapping("/")
 	public String showEtudiantList(Model model) {
+		
 		model.addAttribute("etudiants", etudiantRepository.findAll());
-		String email = "";
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-			email = authentication.getName();
-			model.addAttribute("email", email);
-			model.addAttribute("firstname", userRepository.findByEmail(email).getFirstName());
-			model.addAttribute("lastname", userRepository.findByEmail(email).getLastName());
-			
-		}
+		
+		String email = SecurityConfiguration.getUserEmail();
+		
+		model.addAttribute("email", email);
+		model.addAttribute("id", userRepository.findByEmail(email).getId());
+		model.addAttribute("role", SecurityConfiguration.getUserRole());
+		model.addAttribute("firstname", profilRepository.findByEmail(email).getFirstname());
+		model.addAttribute("lastname", profilRepository.findByEmail(email).getLastname());
+		model.addAttribute("photo_profil", profilRepository.findByEmail(email).getProfil());
+		model.addAttribute("photo_couverture", profilRepository.findByEmail(email).getCouverture());
 		
 		//return "index";
 		return "home";

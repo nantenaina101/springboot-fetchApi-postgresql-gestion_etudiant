@@ -80,6 +80,7 @@ body {
   background-color: #f4f4f4;
   border-radius: 6px;
   padding: 15px;
+  max-height:60px;
 }
 
 .input-control img {
@@ -148,7 +149,7 @@ body {
 }
 
 /* Responsive */
-
+/*
 @media screen and (max-width: 1000px) {
   .global-container{
     grid-template-columns: 1fr;
@@ -179,4 +180,90 @@ body {
     box-shadow: 0 5px 10px rgba(
       0, 0, 0, 0.1);
   }
+}
+*/
+/*Profil*/
+@import url("https://fonts.googleapis.com/css2?family=Poppins:weight@100;200;300;400;500;600;700;800&display=swap");
+
+  
+
+       .card{
+
+        width: 380px;
+        border: none;
+        border-radius: 15px;
+        padding: 8px;
+        background-color: #fff;
+        position: relative;
+        /*height: 370px;*/
+       }
+
+       .upper{
+
+        height: 100px;
+
+       }
+
+       .upper img{
+
+        width: 100%;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+
+       }
+
+       .user{
+        position: relative;
+       }
+
+       .profile img{
+
+        
+        height: 80px;
+        width: 80px;
+        margin-top:2px;
+
+       
+       }
+
+       .profile{
+
+        position: absolute;
+        top:-50px;
+        left: 38%;
+        height: 90px;
+        width: 90px;
+        border:3px solid #fff;
+
+        border-radius: 50%;
+
+       }
+
+       .follow{
+
+        border-radius: 15px;
+        padding-left: 20px;
+        padding-right: 20px;
+        height: 35px;
+       }
+
+       .stats span{
+
+        font-size: 29px;
+       }
+
+.profile > label{
+	position:absolute;
+	top:80%;
+	left:50%;
+	cursor:pointer;
+	color:black;
+}
+
+.couverture > label{
+	position:absolute;
+	top:30%;
+	left:92%;
+	cursor:pointer;
+	color:black;
 }

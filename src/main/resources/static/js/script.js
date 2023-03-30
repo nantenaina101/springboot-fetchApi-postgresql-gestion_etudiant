@@ -125,6 +125,12 @@ function createStudentList(studentList) {
 				image = "Aucune";
 			}
 			
+			let deleteHTML = document.querySelector("#role").value == "ROLE_ADMIN" ? `<span>&nbsp;|&nbsp;</span>
+		                	<a type="button" class="btn" data-toggle="modal" onclick="openModal(${data.id}, '${data.firstname} ${data.lastname}')" data-target="#deleteStudentModal">
+		                		<i style="color:red;" class="bi bi-trash3"></i>
+		                	</a>` : ""
+		   let textModif = document.querySelector("#role").value != "ROLE_ADMIN" ? `<span style="color:blue;"> Modifier</span>` : ""
+			
 		    tr += `<tr>
 		    			<td class="image text-center">
 		    				${image}
@@ -136,12 +142,9 @@ function createStudentList(studentList) {
 		                <td class="sexe">${data.sexe}</td>
 		                <td class="classe" data-id="${data.classe}">${classe}</td>
 		                <td><a href="#mainTitle" type="button" class="btn" onclick="openEditForm(this, ${data.id})">
-		                		<i style="color:blue;" class="bi bi-pencil-square"></i>
+		                		<i style="color:blue;" class="bi bi-pencil-square"></i> ${textModif}
 		                	</a>
-		                	<span>&nbsp;&nbsp;</span>
-		                	<a type="button" class="btn" data-toggle="modal" onclick="openModal(${data.id}, '${data.firstname} ${data.lastname}')" data-target="#deleteStudentModal">
-		                		<i style="color:red;" class="bi bi-trash3"></i>
-		                	</a>
+		                	${deleteHTML}		                	
 		                </td>		
 		            </tr>`
 	  })
@@ -353,5 +356,3 @@ function openEditForm(element,id){
     contentImage.src = element.parentElement.parentElement.querySelector("td.image > img").src
     contentImage.style.marginBottom = "10px";
 }
-
-

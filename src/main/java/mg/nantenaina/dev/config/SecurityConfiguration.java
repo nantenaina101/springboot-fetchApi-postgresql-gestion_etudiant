@@ -51,7 +51,9 @@ public class SecurityConfiguration {
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().authorizeHttpRequests()
-				.requestMatchers("/js/**", "/css/**", "/img/**", "/registration**", "/login**").permitAll().anyRequest()
+				.requestMatchers("/js/**", "/css/**", "/img/**", "/registration**", "/login**").permitAll()
+				.requestMatchers("/user/profil/edit").hasAuthority("ROLE_ADMIN")//or.hasRole("USER")
+				.anyRequest()
 				.authenticated().and().formLogin().loginPage("/login").and().logout().invalidateHttpSession(true)
 				.clearAuthentication(true).logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.logoutSuccessUrl("/login?logout=success").and().httpBasic();
@@ -75,6 +77,26 @@ public class SecurityConfiguration {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		return null != authentication && authentication.isAuthenticated()
 				&& !(authentication instanceof AnonymousAuthenticationToken);
+	}
+
+	public static String getUserEmail() {
+		String email = "";
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			email = authentication.getName();
+		}
+		
+		return email;
+	}
+	
+	public static Object getUserRole() {
+		Object role = null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			role = authentication.getAuthorities();
+		}
+		
+		return role;
 	}
 
 }
